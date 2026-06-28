@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GeoDistance | Coordinate Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        body { background: #0b0f19; color: #f8fafc; font-family: 'Outfit', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: #111827; padding: 30px; border-radius: 12px; border: 1px solid #1f2937; width: 380px; }
+        h2 { color: #f59e0b; text-align: center; }
+        .input-group { margin: 10px 0; }
+        label { display: block; font-size: 0.8rem; color: #9ca3af; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; background: #0b0f19; border: 1px solid #1f2937; color: white; border-radius: 6px; box-sizing: border-box; }
+        button { background: #f59e0b; border: none; padding: 12px; color: black; font-weight: bold; width: 100%; border-radius: 6px; cursor: pointer; margin-top: 15px; }
+        .result { text-align: center; margin-top: 15px; font-weight: bold; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>GeoDistance Tracker</h2>
+        <div class="input-group">
+            <label>Point A (Lat, Lon):</label>
+            <input type="text" id="pointA" value="40.7128, -74.0060">
+        </div>
+        <div class="input-group">
+            <label>Point B (Lat, Lon):</label>
+            <input type="text" id="pointB" value="34.0522, -118.2437">
+        </div>
+        <button onclick="calculate()">Compute Distance</button>
+        <div class="result" id="result">Distance: -</div>
+    </div>
+    <script>
+        function calculate() {
+            const pA = document.getElementById('pointA').value.split(',').map(Number);
+            const pB = document.getElementById('pointB').value.split(',').map(Number);
+            
+            const R = 6371; // Radius of Earth in km
+            const dLat = (pB[0] - pA[0]) * Math.PI / 180;
+            const dLon = (pB[1] - pA[1]) * Math.PI / 180;
+            
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(pA[0] * Math.PI / 180) * Math.cos(pB[0] * Math.PI / 180) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            const d = R * c;
+            
+            document.getElementById('result').textContent = `Distance: ${Math.round(d)} km (${Math.round(d * 0.621371)} miles)`;
+        }
+    </script>
+</body>
+</html>
